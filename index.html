@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบสอบถามความต้องการฝึกอบรม</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* ซ่อน Scrollbar สำหรับตาราง */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* Animation สำหรับเปลี่ยนหน้า */
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+
+    <div class="min-h-screen py-8 px-2 sm:px-6 lg:px-8">
+        <div class="max-w-5xl mx-auto">
+            
+            <!-- Header -->
+            <div class="bg-blue-800 rounded-t-xl shadow-lg p-6 sm:p-10 text-white">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                    <h1 class="text-2xl sm:text-3xl font-bold">แบบสอบถามความต้องการฝึกอบรมหลักสูตรประจำปี 2570</h1>
+                    <div id="page-indicator" class="bg-blue-900 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap border border-blue-700">
+                        หน้าที่ 1 จาก 9
+                    </div>
+                </div>
+                <p class="text-blue-100 text-sm sm:text-base leading-relaxed mb-4">
+                    ระบบสำรวจความต้องการฝึกอบรมหลักสูตรมาตรวิทยาประจำปีออนไลน์ เพื่อประเมินความต้องการของผู้เข้ารับการฝึกอบรม นำไปพัฒนาต่อยอดและกำหนดนโยบายให้ตอบสนองต่อภาคเอกชนและภาครัฐอย่างมีประสิทธิภาพ
+                </p>
+            </div>
+
+            <!-- Status Message -->
+            <div id="status-message" class="hidden mt-4 p-4 rounded-lg flex items-start gap-3 shadow-sm transition-all">
+                <svg id="status-icon-error" class="hidden w-5 h-5 shrink-0 mt-0.5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <svg id="status-icon-success" class="hidden w-5 h-5 shrink-0 mt-0.5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <p id="status-text" class="font-medium"></p>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-200 h-1.5 mt-0">
+                <div id="progress-bar" class="bg-blue-500 h-1.5 transition-all duration-300" style="width: 11.11%"></div>
+            </div>
+
+            <form id="survey-form" class="mt-6">
+                
+                <!-- ======================= Page 0: ข้อมูลทั่วไป ======================= -->
+                <div id="page-0" class="page-section bg-white p-6 sm:p-8 rounded-xl shadow-sm border border-gray-100 fade-in">
+                    <div class="flex items-center gap-2 mb-6 border-b pb-4">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        <h2 class="text-xl font-bold text-gray-800">ข้อมูลทั่วไป</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">ชื่อ – นามสกุล <span class="text-red-500">*</span></label>
+                            <input type="text" id="fullname" required class="w-full rounded-lg border-gray-300 border p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all"/>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">E-mail <span class="text-red-500">*</span></label>
+                            <input type="email" id="email" required class="w-full rounded-lg border-gray-300 border p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all"/>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">ชื่อบริษัท/หน่วยงาน <span class="text-red-500">*</span></label>
+                            <input type="text" id="company" required class="w-full rounded-lg border-gray-300 border p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all"/>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-semibold text-gray-700 mb-3">หน่วยงานของท่านเป็นองค์การแบบใด <span class="text-red-500">*</span></label>
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <label class="flex items-start p-4 border rounded-lg cursor-pointer transition-all hover:bg-gray-50" id="label-org-private">
+                                    <input type="radio" name="orgType" value="เอกชน" required class="mt-1 w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500" onchange="updateRadioUI()" />
+                                    <div class="ml-3">
+                                        <span class="block text-sm font-medium text-gray-900">องค์การภาคเอกชน</span>
+                                        <span class="block text-xs text-gray-500 mt-1">บริษัท ห้างร้าน มูลนิธิ สมาคม</span>
+                                    </div>
+                                </label>
+                                <label class="flex items-start p-4 border rounded-lg cursor-pointer transition-all hover:bg-gray-50" id="label-org-public">
+                                    <input type="radio" name="orgType" value="ภาครัฐ" required class="mt-1 w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500" onchange="updateRadioUI()" />
+                                    <div class="ml-3">
+                                        <span class="block text-sm font-medium text-gray-900">องค์กรภาครัฐ</span>
+                                        <span class="block text-xs text-gray-500 mt-1">กระทรวง ทบวง กรม รัฐวิสาหกิจ</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Container for Course Pages (1-7) -->
+                <div id="dynamic-course-pages"></div>
+
+                <!-- ======================= Page 8: ข้อเสนอแนะ ======================= -->
+                <div id="page-8" class="page-section hidden bg-white p-6 sm:p-8 rounded-xl shadow-sm border border-gray-100 fade-in">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-4">หลักสูตรที่ต้องการที่ไม่มีในตัวเลือกข้างต้น</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">จำนวนคนที่ต้องการส่งเข้าอบรม (สำหรับหลักสูตรเพิ่มเติม)</label>
+                            <select id="otherParticipants" class="w-full sm:w-1/2 rounded-lg border-gray-300 border p-3 focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                                <option value="1-6 คน">1-6 คน</option>
+                                <option value="7-15 คน">7-15 คน</option>
+                                <option value="มากกว่า 15 คน">มากกว่า 15 คน</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">ระบุชื่อเครื่องมือวัดที่ต้องการให้เปิดบริการฝึกอบรม / ข้อเสนอแนะ</label>
+                            <textarea id="otherSuggestion" rows="4" class="w-full rounded-lg border-gray-300 border p-3 focus:ring-2 focus:ring-blue-500 outline-none resize-none" placeholder="พิมพ์ข้อเสนอแนะของท่านที่นี่..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Navigation Buttons -->
+                <div class="pt-6 pb-12 flex flex-col-reverse sm:flex-row justify-between items-center gap-4">
+                    
+                    <button type="button" id="btn-prev" class="hidden items-center justify-center gap-2 px-6 py-3 rounded-xl text-gray-700 bg-white border border-gray-300 font-semibold hover:bg-gray-50 hover:text-blue-600 transition-all w-full sm:w-auto">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        ย้อนกลับ
+                    </button>
+                    
+                    <div id="btn-spacer" class="w-full sm:w-auto"></div>
+
+                    <button type="button" id="btn-next" class="flex items-center justify-center gap-2 px-8 py-3 rounded-xl text-white bg-blue-600 font-bold hover:bg-blue-700 hover:shadow-lg transition-all w-full sm:w-auto">
+                        หน้าถัดไป
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+
+                    <button type="submit" id="btn-submit" class="hidden items-center justify-center gap-2 px-8 py-3 rounded-xl text-white font-bold text-lg w-full sm:w-auto transition-all shadow-md bg-emerald-600 hover:bg-emerald-700 hover:shadow-lg active:scale-95">
+                        <span id="submit-text" class="flex items-center gap-2">
+                            ส่งแบบสอบถาม
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Javascript Logic -->
+    <script>
+        // ข้อมูลหมวดหมู่และหลักสูตรจากเอกสาร
+        const coursesData = [
+            { category: "1. ระบบคุณภาพ", courses: ["การประเมินค่าความไม่แน่นอนของการวัด", "การประเมินค่าความไม่แน่นอนของการวัดสำหรับทดสอบ", "ระบบคุณภาพห้องปฏิบัติการตาม ISO/IEC 17025:2017(E)", "การตรวจติดตามระบบคุณภาพภายในห้องปฏิบัติการ", "ความเข้าใจและการตีความใบรับรองผลการสอบเทียบ", "ระบบควบคุมเครื่องมือวัดตามข้อกำหนด ISO 9001 ISO/IEC 17025 ISO 14001 และ ISO 45001", "การแปลความและประยุกต์ใช้ใบรายงานผลการสอบเทียบเพื่อควบคุมคุณภาพ", "แบบจำลองทางคณิตศาสตร์เพื่อนำไปใช้ประเมินความไม่แน่นอนทางการวัดของการทดสอบและสอบเทียบ", "มาตรฐานระบบบริหารงานคุณภาพ ISO 9001: 2015 การนำไปใช้และการตรวจติดตามภายใน", "การประยุกต์ใช้หลักสถิติเพื่อการควบคุมและประกันคุณภาพ", "การสอบเทียบและจัดการเครื่องมือวัดตามระบบคุณภาพ", "การจัดทำเอกสารระบบการบริหารงานตามมาตรฐาน ISO/IEC 17025 : 2017", "การประยุกต์ใช้ความไม่แน่นอนในการวัด สำหรับการสอบเทียบและการจัดการเครื่องมือวัด", "การประยุกต์ใช้ Ms Excel สำหรับงานสอบเทียบและการควบคุมคุณภาพ", "การประเมินค่าความไม่แน่นอนของการวัดด้วยวิธีมอนติคาร์โล (Monte Carlo method)", "การประเมินค่าความไม่แน่นอนในการวัดและการจัดทำ Uncertainty Budget ด้วยโปรแกรม Microsoft Excel", "การจัดการความเสี่ยงสำหรับห้องปฏิบัติการตามมาตรฐาน ISO17025:2017", "การใช้โปรแกรมภาษา Labview ในการควบคุมเครื่องมือและพัฒนาระบบอัตโนมัติ (LabVIEW for Automation)"] },
+            { category: "2. ด้านเคมีและชีวภาพ", courses: ["การประเมินค่าความไม่แน่นอนของการวัดในการวิเคราะห์ทางเคมี (EMU)", "การตรวจสอบความใช้ได้ของวิธีวัดทางเคมี (AMV)", "ข้อกำหนดระบบคุณภาพสำหรับผู้ผลิตวัสดุอ้างอิง ตาม ISO 17034: 2016", "แนวทางในการกำหนดค่าอ้างอิง การประเมินความเป็นเนื้อเดียวกัน และ การประเมินความเสถียรของ วัสดุอ้างอิง ISO 33405:2024", "การสอบกลับได้ทางมาตรวิทยาของผลการวัดทางเคมี", "การประเมินค่าความไม่แน่นอนของการวัดดีเอ็นเอ", "การสอบเทียบ Piston Pipette", "การสอบเทียบ pH meter", "การสอบเทียบ Conductivity Meter", "การสอบเทียบ Refractometer", "การสอบเทียบเครื่องตรวจจับก๊าซ", "การวิเคราะห์ปริมาณองค์ประกอบในก๊าซผสม", "การประเมินค่าความไม่แน่นอนของการตรวจวัดฝุ่นละอองในปล่องระบายและบรรยากาศ (FRM)", "การสอบเทียบเครื่องวิเคราะห์ก๊าซ (Gas Analyzer Calibration)", "การประเมินค่าความไม่แน่นอนของการสอบเทียบปริมาตรด้วยวิธีการชั่งน้ำหนัก", "การควบคุมคุณภาพการวิเคราะห์ด้านสิ่งแวดล้อม", "สถิติสำหรับการวิเคราะห์ทางเคมี", "การวิเคราะห์ธาตุด้วย ICP-MS: การใช้งาน การควบคุมคุณภาพ และการประเมินความไม่แน่นอน", "การสอบเทียบเครื่องมือตรวจวัดก๊าซโอโซนในอากาศ"] },
+            { category: "3. ด้านไฟฟ้า", courses: ["การสอบเทียบดิจิทัลมัลติมิเตอร์", "การสอบเทียบเครื่องสอบเทียบทางไฟฟ้า (The Calibration of Calibrator)", "การสอบเทียบตัวเก็บประจุ ตัวเหนี่ยวนำ และตัวต้านทานด้วยเครื่องมือ LCR Meter", "การสอบเทียบมาตรฐานสำหรับวัดค่าความแตกต่างถ่ายเทระหว่างไฟฟ้ากระแสสลับและไฟฟ้ากระแสตรง", "การสอบเทียบออสซิลโลสโคปด้วยชุดมาตรฐานใหม่ อ้างอิงมาตรฐาน EURAMET cg-7", "การสอบเทียบด้านกำลังคลื่นความถี่วิทยุไมโครเวป (RF Power Sensor & Power Meter)", "การสอบเทียบเครื่องวัดกำลังไฟฟ้าและพลังงานไฟฟ้า", "การสอบเทียบเครื่องมือวัดทางด้านไฟฟ้าแรงดันสูง", "การสอบเทียบ Network Analyzer", "การสอบเทียบ Laser Power Meter และ Fiber optic power meter", "การสอบเทียบเครื่องวัดคุณภาพไฟฟ้า (Harmonics and Flicker)", "หลักการใช้งาน Calibrator พร้อมการทวนสอบอย่างถูกวิธี", "การทวนสอบเครื่องมือวัดดิจิทัลมัลติมิเตอร์", "การเปรียบเทียบสัญญาณเวลาและความถี่จาก GNSS", "การสอบเทียบความถี่", "การวัดและการสอบเทียบเครื่องกำเนิดความถี่", "การสอบเทียบเครื่องมือวัดอุณหภูมิโดยปริมาณทางไฟฟ้า", "การสอบเทียบเครื่องตรวจจับความเร็วชนิดแสงเลเซอร์", "การประยุกต์ใช้ GUM Workbench ในการประเมินความไม่แน่นอนของการวัด", "ความรู้เบื้องต้นเกี่ยวกับเลเซอร์และความปลอดภัยในการใช้งาน", "การสอบเทียบมาตรพลังงานไฟฟ้าแบบนอกสถานที่ (Onsite energy meter calibration)", "การสอบเทียบแหล่งกำเนิดและเครื่องอ่านกระแสไฟฟ้ากระแสตรง โดยวิธีโวลต์-แอมแปร์", "การใช้งานเครื่องมือวัดและหลักการสอบเทียบเครื่องมือวัดทางไฟฟ้าเบื้องต้น", "การรับสัญญาณจาก GNSS เบื้องต้น"] },
+            { category: "4. ด้านเชิงกล", courses: ["การสอบเทียบเครื่องทดสอบแรงดึง-กด ตามมาตรฐาน ISO 7500-1 (UTM)", "การสอบเทียบเครื่องทดสอบความแข็งชนิดร็อคเวลตามมาตรฐาน ISO 6508:2015 และ ASTM E18-22", "การทำ Intermediate check สำหรับเครื่องมือวัดแรงบิดมาตรฐาน", "การสอบเทียบ Hand Torque Tools ตามมาตรฐาน ISO 6789:2017", "การสอบเทียบ Torque Wrench Calibration Devices ตามมาตรฐาน DKD-R 10-8", "การสอบเทียบเครื่องมือวัดความดันขั้นพื้นฐาน", "การทวนสอบผลการสอบเทียบเครื่องมือวัดความดันและการนำไปใช้งาน", "การสอบเทียบเครื่องมือวัดด้านสุญญากาศ", "การสอบเทียบเครื่องมือวัดความดันชนิดอ่านเป็นสัญญาณไฟฟ้า", "การทดสอบเครื่องมือวัดความดันโลหิตประเภทไม่ต้องเจาะเส้นเลือด", "การสอบเทียบเครื่องมือวัดอัตราการไหลของของเหลว", "การสอบเทียบเครื่องมือวัดอัตราการไหลของของเหลวโดยวิธีมาสเตอร์มิเตอร์", "การสอบเทียบเครื่องมือวัดทางการแพทย์ เครื่องควบคุมการให้สารละลายทางหลอดเลือดดำ (Infusion Pump)", "การสอบเทียบตุ้มน้ำหนักมาตรฐานตาม OIML R 111-1 และตุ้มน้ำหนักขนาดใหญ่", "การสอบเทียบเครื่องชั่งอิเล็กทรอนิกส์ตามมาตรฐาน UKAS LAB 14", "การสอบเทียบเครื่องชั่งอิเล็กทรอนิกส์แบบไม่อัตโนมัติ ตามมาตรฐาน EURAMET Calibration Guide No. 18 : cg-18", "การสอบเทียบ Hydrometer ด้วยวิธี Cuckow (Hydrostatic Weighing)", "การสอบเทียบเครื่อง Density Meter (Oscillation Type) ตามมาตรฐาน ISO15212-1", "การสอบเทียบถังปริมาตรมาตรฐาน ด้วยวิธี Transfer method", "การสอบเทียบเครื่องวัดความเร็วลม (Air speed anemometer) โดยใช้ Hotwire anemometer และ Pitot tube anemometer เป็นเครื่องมือมาตรฐาน", "การสอบเทียบเครื่องมือวัดอัตราการไหลของแก๊ส", "การทำให้เป็นจริงตามนิยามของเครื่องกำเนิดแรงบิดประเภทระบบคานและตุ้มน้ำหนักแบบไม่มีอุปกรณ์รองรับแรงตามขวาง", "การทดสอบความแข็งชนิดวิกเกอร์สตามมาตรฐาน ISO 6507-1:2023"] },
+            { category: "5. ด้านอุณหภูมิและแสง", courses: ["การสอบเทียบ Liquid in Glass Thermometer", "การสอบเทียบดิจิทัลเทอร์โมมิเตอร์ (Digital Thermometers)", "การสอบเทียบ Digital Thermometer & Temperature Source", "การสอบเทียบเทอร์โมคัปเปิลและตัวอ่านสำหรับเทอร์โมคัปเปิล", "การสอบเทียบเทอร์โมมิเตอร์ความต้านทานแพลทินัม", "การสอบเทียบ Infrared Thermometer (แบบ 2 วัน)", "การสอบเทียบเครื่องมือวัดทางความชื้นในอากาศ", "การสอบเทียบ Climatic Chamber ตามมาตรฐาน DKD-R 5-7", "การใช้งานเครื่องมือวัดอุณหภูมิและความชื้นเบื้องต้นสำหรับภาคอุตสาหกรรม", "การทวนสอบเครื่องมือวัดอุณหภูมิ", "พื้นฐานการสอบเทียบเครื่องมือวัดทางอุณหภูมิ", "การสอบเทียบ Temperature Source", "การสอบเทียบมาตรรังสียูวี", "การทวนสอบหลอดรังสียูวีด้วยมาตรรังสียูวี", "การสอบเทียบและการประยุกต์ใช้ไพรานอมิเตอร์", "การทดสอบสมรรถนะเครื่องจำลองแสงอาทิตย์ตามมาตรฐาน IEC 60904-9:2007", "การตรวจวัดคุณสมบัติทางแสงของอุปกรณ์ส่องไฟที่ใช้บำบัดรักษาภาวะตัวเหลืองในเด็กทารกแรกเกิดตามมาตรฐาน IEC 60601-2-50 Edition 2.1 2016-04", "การสอบเทียบเครื่อง Global UV Solar Index Meter ตามมาตรฐาน CIE S013/E:2003", "การทำลายเชื้อโรคด้วยรังสียูวี: การออกแบบ หลักการวัด และการประเมินสมรรถนะเบื้องต้น", "การสอบเทียบมาตรความสว่าง", "การคำนวณค่าสีและการประเมินความไม่แน่นอนทางการวัดสี", "การทดสอบผลิตภัณฑ์แอลอีดีตามมาตรฐาน IES LM 79", "การสอบเทียบ Infrared Thermometer (แบบ 3 วัน)", "การใช้งานและการทวนสอบอินฟราเรดเทอร์โมมิเตอร์"] },
+            { category: "6. ด้านมิติ", courses: ["การประเมินค่าความไม่แน่นอนของเครื่องมือวัดทางด้านมิติ", "หลักการใช้งานและบำรุงรักษาเครื่องมือวัดละเอียดด้านมิติ", "การสอบเทียบความเรียบของโต๊ะระดับ", "การสอบเทียบความตรงโดยใช้วิธีสลับด้าน", "การขัดผิวหน้าและบำรุงรักษาคุณภาพของเกจบล็อก", "หลักการสำคัญและการตรวจสอบ GD&T ด้วยเครื่องมือวัดขั้นสูง", "หลักเกณฑ์ความคลาดเคลื่อนทางขนาดและเรขาคณิต (GD&T) ระดับ 1", "การประเมินค่าความไม่แน่นอนของซีเอ็มเอ็มตามมาตรฐาน ISO/TS 23165", "การทวนสอบซีเอ็มเอ็มตามมาตรฐาน ISO 10360-2, ISO 10360-5", "การทวนสอบซีเอ็มเอ็มแบบไม่สัมผัส หรือวีดีโอซีเอ็มเอ็มตามมาตรฐาน ISO 10360-7", "การสอบเทียบ Thread Ring Gauge และ Thread Plug Gauge", "การใช้งานและประยุกต์ใช้เลเซอร์อินเตอร์เฟียโรมิเตอร์เพื่อการวัดและสอบเทียบด้านมิติความละเอียดสูง", "การสอบเทียบเกจบล็อกด้วยวิธีการวัดเปรียบเทียบเชิงกล และการประเมินความไม่แน่นอน", "การสอบเทียบไฮเกจและไฮมาสเตอร์ด้วยเกจบล็อกมาตรฐานและการประเมินค่าความไม่แน่นอนของการวัด", "การสอบเทียบเกจบล็อกขนาด 0.5 มม. ถึง 1000 มม. ด้วยวิธีการวัดเปรียบเทียบแบบเชิงกลและการประเมินค่าความไม่แน่นอนของการวัด", "การสอบเทียบเครื่องวัดเกจบล็อกแบบเปรียบเทียบตามข้อกาหนด Euramet cg-2/v.2 และการประเมินค่าความไม่แน่นอนของการวัด", "ความรู้พื้นฐานเกี่ยวกับการใช้งาน บำรุงรักษา สอบเทียบเกจบล็อกในงานมาตรวิทยามิติ", "การสอบเทียบ Dial Gauge และ Dial Test Indicator ตามมาตรฐานญี่ปุ่น (JIS B7503 : 2017, JIS B7533 : 2015)", "การสอบเทียบและการประเมินค่าความไม่แน่นอนในการสอบเทียบ Dial Gauge Tester และ Calibration Tester", "เทคนิคการวัดรูปร่างขั้นสูง (Advanced Form Measurement)", "การประเมินค่าความไม่แน่นอนในการวัดขนาดวัสดุนาโนด้วยกล้องจุลทรรศน์อิเล็กตรอน", "การประเมินค่าความไม่แน่นอนในการสอบเทียบเครื่อง Roundness measuring instrument", "หลักการใช้งานเครื่องวัดความกลม (Roundness measuring instrument) ตามมาตรฐานสากล", "หลักการใช้งานเครื่องวัดความหยาบตามมาตรฐานสากล", "การสอบเทียบไมโครมิเตอร์ตามมาตรฐาน JIS B 7502 : 2016 และการประเมินค่าความไม่แน่นอนของการวัด", "การสอบเทียบเวอร์เนียร์คาลิเปอร์ตามมาตรฐาน JIS B 7507 : 2022 และการประเมินค่าความไม่แน่นอนของการวัด", "การสอบเทียบ parallel thread ring gauge ตาม Calibration Guide, Euramet cg-10", "การสอบเทียบ parallel thread plug gauge ตาม Calibration Guide, Euramet cg-10", "การทวนสอบ pitch diameter ของ parallel thread plug gauge ด้วย ULM และ 3-wire", "การตรวจสอบและการทวนสอบเครื่องมือทางด้านมิติ"] },
+            { category: "7. ด้านเสียงและการสั่นสะเทือน", courses: ["การใช้งานเครื่องมือวัดด้านเสียงและการพิจารณาค่าในใบรายงานผลการสอบเทียบ", "การสอบเทียบเครื่องอัลตราซาวด์กายภาพบำบัด", "การสอบเทียบเครื่อง Vibration Meter", "การวัดและทดสอบค่า sound absorption coefficients ของวัสดุทางเสียง", "การสอบเทียบเครื่องวัดกำลังคลื่นเหนือเสียง (Ultrasound Power Meter)", "การวัดเสียงรบกวนและการประเมินค่าความไม่แน่นอน (Noise Measurement and uncertainty evaluation)"] }
+        ];
+
+        const trainingFormats = ["On-Site", "Online", "E-Learning", "Hybrid Learning"];
+        const TOTAL_PAGES = coursesData.length + 2; // หน้า 0 ถึง 8 รวมเป็น 9 หน้า
+
+        // State Variables
+        let currentPage = 0;
+        let courseSelections = {}; // Structure: { "Course Name": { interested: true, formats: ["Online"] } }
+        let isSubmitting = false;
+
+        // DOM Elements
+        const form = document.getElementById('survey-form');
+        const btnNext = document.getElementById('btn-next');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnSubmit = document.getElementById('btn-submit');
+        const btnSpacer = document.getElementById('btn-spacer');
+        const dynamicContainer = document.getElementById('dynamic-course-pages');
+
+        // Initializer
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCoursePages();
+            updateView();
+        });
+
+        // 1. Generate Tables for Pages 1-7
+        function renderCoursePages() {
+            coursesData.forEach((data, index) => {
+                const pageIndex = index + 1;
+                const div = document.createElement('div');
+                div.id = `page-${pageIndex}`;
+                div.className = 'page-section hidden bg-white p-4 sm:p-8 rounded-xl shadow-sm border border-gray-100 fade-in';
+                
+                let tbodyHTML = '';
+                data.courses.forEach((course, idx) => {
+                    // Unique ID for labels
+                    const idPrefix = `course-${pageIndex}-${idx}`;
+                    
+                    tbodyHTML += `
+                        <tr id="row-${idPrefix}" class="transition-colors hover:bg-blue-50/40">
+                            <td class="p-3 border-r border-gray-200 text-center text-gray-500">${idx + 1}</td>
+                            <td id="title-${idPrefix}" class="p-3 border-r border-gray-200 text-gray-700">${course}</td>
+                            
+                            <td class="p-3 border-r border-gray-200 text-center bg-gray-50/30">
+                                <label class="flex items-center justify-center cursor-pointer w-full h-full">
+                                    <input type="checkbox" onchange="toggleInterest('${course}', '${idPrefix}')" id="chk-int-${idPrefix}" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer" />
+                                </label>
+                            </td>
+                            
+                            ${trainingFormats.map((format, fIdx) => `
+                                <td class="p-2 text-center ${fIdx !== 3 ? 'border-r border-gray-200' : ''}">
+                                    <label class="flex items-center justify-center cursor-pointer w-full h-full">
+                                        <input type="checkbox" onchange="toggleFormat('${course}', '${format}', '${idPrefix}')" id="chk-fmt-${fIdx}-${idPrefix}" class="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500 cursor-pointer" />
+                                    </label>
+                                </td>
+                            `).join('')}
+                        </tr>
+                    `;
+                });
+
+                div.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b pb-4">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            <h2 class="text-xl font-bold text-gray-800">หลักสูตร ${data.category}</h2>
+                        </div>
+                        <div class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full whitespace-nowrap">
+                            <span id="count-badge-${pageIndex}">คุณเลือกทั้งหมด 0 หลักสูตร</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-3">
+                        <strong>คำชี้แจง:</strong> หากมีความสนใจ กรุณาติ๊กในช่อง <strong>"มีความสนใจเข้าร่วมอบรม"</strong> และเลือกรูปแบบการอบรมด้านขวามือ (เลือกได้มากกว่า 1 รูปแบบ)
+                    </p>
+                    <div class="overflow-x-auto border rounded-lg shadow-sm hide-scrollbar">
+                        <table class="w-full text-sm text-left border-collapse bg-white min-w-[800px]">
+                            <thead class="bg-blue-50 text-blue-900 border-b-2 border-blue-200">
+                                <tr>
+                                    <th rowspan="2" class="p-3 border-r border-gray-200 text-center w-12 font-semibold">ที่</th>
+                                    <th rowspan="2" class="p-3 border-r border-gray-200 font-semibold min-w-[280px]">ชื่อหลักสูตร</th>
+                                    <th rowspan="2" class="p-3 border-r border-gray-200 text-center font-semibold w-28 bg-blue-100/50">มีความสนใจ<br/>เข้าร่วมอบรม</th>
+                                    <th colspan="4" class="p-2 text-center border-b border-gray-200 font-semibold">รูปแบบการอบรมที่ท่านยินดีเข้าร่วม</th>
+                                </tr>
+                                <tr class="bg-gray-50/50">
+                                    <th class="p-2 border-r border-gray-200 text-center w-24 text-xs font-medium">On-Site</th>
+                                    <th class="p-2 border-r border-gray-200 text-center w-24 text-xs font-medium">Online</th>
+                                    <th class="p-2 border-r border-gray-200 text-center w-28 text-xs font-medium">E-Learning</th>
+                                    <th class="p-2 text-center w-28 text-xs font-medium">Hybrid</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                ${tbodyHTML}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                dynamicContainer.appendChild(div);
+            });
+        }
+
+        // 2. State Management for Checkboxes
+        function toggleInterest(course, rowIdPrefix) {
+            if (!courseSelections[course]) {
+                courseSelections[course] = { interested: false, formats: [] };
+            }
+            const current = courseSelections[course];
+            current.interested = !current.interested;
+
+            // ถ้าผู้ใช้กดเอา "สนใจ" ออก เราจะลบการติ๊กรูปแบบทั้งหมดออกด้วยเลย (เพื่อไม่ให้ค้าง)
+            if (!current.interested) {
+                current.formats = [];
+                delete courseSelections[course];
+            }
+            updateRowUI(course, rowIdPrefix);
+            updateGlobalSelectionCount();
+        }
+
+        function toggleFormat(course, format, rowIdPrefix) {
+            if (!courseSelections[course]) {
+                courseSelections[course] = { interested: false, formats: [] };
+            }
+            const current = courseSelections[course];
+            const formatIndex = current.formats.indexOf(format);
+
+            if (formatIndex > -1) {
+                current.formats.splice(formatIndex, 1); // remove
+            } else {
+                current.formats.push(format); // add
+            }
+
+            // ถ้ารูปแบบโดนเลือก ให้ติ๊ก "สนใจ" อัตโนมัติด้วย
+            if (current.formats.length > 0) {
+                current.interested = true;
+            } else {
+                // ถ้าเอารูปแบบออกจนหมด ให้เอา "สนใจ" ออกด้วย
+                current.interested = false;
+                delete courseSelections[course];
+            }
+            
+            updateRowUI(course, rowIdPrefix);
+            updateGlobalSelectionCount();
+        }
+
+        function updateRowUI(course, rowIdPrefix) {
+            const data = courseSelections[course] || { interested: false, formats: [] };
+            const row = document.getElementById(`row-${rowIdPrefix}`);
+            const title = document.getElementById(`title-${rowIdPrefix}`);
+            const chkInt = document.getElementById(`chk-int-${rowIdPrefix}`);
+
+            // Update row background & title color
+            if (data.interested || data.formats.length > 0) {
+                row.classList.add('bg-blue-50/20');
+                title.classList.replace('text-gray-700', 'text-blue-800');
+                title.classList.add('font-medium');
+            } else {
+                row.classList.remove('bg-blue-50/20');
+                title.classList.replace('text-blue-800', 'text-gray-700');
+                title.classList.remove('font-medium');
+            }
+
+            // Sync Interest Checkbox
+            chkInt.checked = data.interested;
+
+            // Sync Format Checkboxes
+            trainingFormats.forEach((format, fIdx) => {
+                const chkFmt = document.getElementById(`chk-fmt-${fIdx}-${rowIdPrefix}`);
+                if(chkFmt) chkFmt.checked = data.formats.includes(format);
+            });
+        }
+
+        function updateGlobalSelectionCount() {
+            const count = Object.keys(courseSelections).length;
+            // Update all badges
+            for(let i = 1; i <= coursesData.length; i++) {
+                const badge = document.getElementById(`count-badge-${i}`);
+                if (badge) badge.innerText = `คุณเลือกทั้งหมด ${count} หลักสูตร`;
+            }
+        }
+
+        // 3. UI Radio Buttons Styling Update (Page 0)
+        function updateRadioUI() {
+            const privateRadio = document.querySelector('input[value="เอกชน"]').checked;
+            const publicRadio = document.querySelector('input[value="ภาครัฐ"]').checked;
+            const labelPrivate = document.getElementById('label-org-private');
+            const labelPublic = document.getElementById('label-org-public');
+
+            if(privateRadio) {
+                labelPrivate.className = 'flex items-start p-4 border rounded-lg cursor-pointer transition-all border-blue-500 bg-blue-50 ring-1 ring-blue-500';
+            } else {
+                labelPrivate.className = 'flex items-start p-4 border rounded-lg cursor-pointer transition-all hover:bg-gray-50 border-gray-200 bg-white';
+            }
+
+            if(publicRadio) {
+                labelPublic.className = 'flex items-start p-4 border rounded-lg cursor-pointer transition-all border-blue-500 bg-blue-50 ring-1 ring-blue-500';
+            } else {
+                labelPublic.className = 'flex items-start p-4 border rounded-lg cursor-pointer transition-all hover:bg-gray-50 border-gray-200 bg-white';
+            }
+        }
+
+        // 4. Status Messages
+        function showStatus(type, message) {
+            const statusDiv = document.getElementById('status-message');
+            const textDiv = document.getElementById('status-text');
+            const iconError = document.getElementById('status-icon-error');
+            const iconSuccess = document.getElementById('status-icon-success');
+
+            statusDiv.classList.remove('hidden', 'bg-red-50', 'text-red-800', 'border-l-4', 'border-red-500', 'bg-green-50', 'text-green-800', 'border-green-500');
+            iconError.classList.add('hidden');
+            iconSuccess.classList.add('hidden');
+
+            textDiv.innerText = message;
+
+            if (type === 'error') {
+                statusDiv.classList.add('bg-red-50', 'text-red-800', 'border-l-4', 'border-red-500');
+                iconError.classList.remove('hidden');
+            } else if (type === 'success') {
+                statusDiv.classList.add('bg-green-50', 'text-green-800', 'border-l-4', 'border-green-500');
+                iconSuccess.classList.remove('hidden');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function hideStatus() {
+            document.getElementById('status-message').classList.add('hidden');
+        }
+
+        // --- NEW VALIDATION FUNCTION ---
+        // ตรวจสอบว่าในหน้าที่กำลังแสดงอยู่ มีหลักสูตรไหนติ๊กสนใจแต่ไม่เลือกว่าจะเรียนแบบไหนหรือไม่
+        function validateCurrentPageSelections() {
+            if (currentPage < 1 || currentPage > coursesData.length) return { isValid: true };
+
+            const currentCategoryCourses = coursesData[currentPage - 1].courses;
+            for (let i = 0; i < currentCategoryCourses.length; i++) {
+                const courseName = currentCategoryCourses[i];
+                const selection = courseSelections[courseName];
+                
+                // ถ้าติ๊กสนใจ แต่ไม่ได้เลือกรูปแบบเลย
+                if (selection && selection.interested === true && selection.formats.length === 0) {
+                    return {
+                        isValid: false,
+                        errorCourse: courseName
+                    };
+                }
+            }
+            return { isValid: true };
+        }
+
+        // 5. Navigation Logic
+        function updateView() {
+            // Hide all pages
+            document.querySelectorAll('.page-section').forEach(el => el.classList.add('hidden'));
+            
+            // Show current page
+            const currentEl = document.getElementById(`page-${currentPage}`);
+            if (currentEl) currentEl.classList.remove('hidden');
+
+            // Update Progress Bar & Indicator
+            document.getElementById('progress-bar').style.width = `${((currentPage + 1) / TOTAL_PAGES) * 100}%`;
+            document.getElementById('page-indicator').innerText = `หน้าที่ ${currentPage + 1} จาก ${TOTAL_PAGES}`;
+
+            // Buttons visibility
+            if (currentPage === 0) {
+                btnPrev.classList.add('hidden');
+                btnPrev.classList.remove('flex');
+                btnSpacer.classList.remove('hidden');
+            } else {
+                btnPrev.classList.remove('hidden');
+                btnPrev.classList.add('flex');
+                btnSpacer.classList.add('hidden');
+            }
+
+            if (currentPage === TOTAL_PAGES - 1) {
+                btnNext.classList.add('hidden');
+                btnSubmit.classList.remove('hidden');
+                btnSubmit.classList.add('flex'); // Add flex back
+            } else {
+                btnNext.classList.remove('hidden');
+                btnNext.classList.add('flex');
+                btnSubmit.classList.add('hidden');
+                btnSubmit.classList.remove('flex');
+            }
+        }
+
+        btnNext.addEventListener('click', () => {
+            hideStatus();
+            
+            // Validation Page 0 (ข้อมูลทั่วไป)
+            if (currentPage === 0) {
+                const formElements = document.getElementById('survey-form').elements;
+                if (!formElements['fullname'].value || !formElements['email'].value || !formElements['company'].value || !formElements['orgType'].value) {
+                    showStatus('error', 'กรุณากรอกข้อมูลให้ครบถ้วนหรือเลือกประเภทองค์กรก่อนดำเนินการต่อ');
+                    return;
+                }
+            }
+
+            // Validation Page 1-7 (หมวดหมู่หลักสูตร)
+            if (currentPage >= 1 && currentPage <= coursesData.length) {
+                const validationResult = validateCurrentPageSelections();
+                if (!validationResult.isValid) {
+                    // แจ้งเตือนสีแดง และระบุชื่อหลักสูตรที่ลืมเลือกรูปแบบ
+                    showStatus('error', `กรุณาระบุรูปแบบการอบรม (On-Site, Online ฯลฯ) สำหรับหลักสูตรที่ท่านสนใจ:\n"${validationResult.errorCourse}"`);
+                    return; // หยุดการทำงาน ไม่ให้เปลี่ยนหน้า
+                }
+            }
+
+            if (currentPage < TOTAL_PAGES - 1) {
+                currentPage++;
+                updateView();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+
+        btnPrev.addEventListener('click', () => {
+            hideStatus();
+            if (currentPage > 0) {
+                currentPage--;
+                updateView();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+
+        // 6. Form Submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideStatus();
+
+            const selectedCount = Object.keys(courseSelections).length;
+            const suggestionValue = document.getElementById('otherSuggestion').value.trim();
+
+            if (selectedCount === 0 && !suggestionValue) {
+                showStatus('error', 'กรุณาเลือกหลักสูตรที่สนใจอย่างน้อย 1 หลักสูตร หรือเสนอแนะหลักสูตรใหม่ในหน้านี้');
+                return;
+            }
+
+            if(isSubmitting) return;
+            isSubmitting = true;
+
+            // Update button state
+            const submitBtnOriginalHTML = btnSubmit.innerHTML;
+            btnSubmit.innerHTML = `
+                <span class="flex items-center gap-2">
+                    <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    กำลังส่งข้อมูล...
+                </span>
+            `;
+            btnSubmit.classList.add('cursor-not-allowed', 'opacity-80');
+
+            // Format Data for Sheet
+            const formattedSelectionsForSheet = {};
+            for (const [course, data] of Object.entries(courseSelections)) {
+                if (data.interested || data.formats.length > 0) {
+                    formattedSelectionsForSheet[course] = data.formats;
+                }
+            }
+
+            const payload = {
+                timestamp: new Date().toISOString(),
+                fullname: document.getElementById('fullname').value,
+                email: document.getElementById('email').value,
+                company: document.getElementById('company').value,
+                orgType: document.querySelector('input[name="orgType"]:checked').value,
+                selections: JSON.stringify(formattedSelectionsForSheet),
+                otherCourseParticipants: document.getElementById('otherParticipants').value,
+                otherCourseSuggestion: suggestionValue
+            };
+
+            try {
+                // ⚠️ นำ URL ของ Google Apps Script ของคุณมาใส่ตรงนี้ ⚠️
+                const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuJnSzzyAZDwYb0Dkdsa0O9-f0J5xsPG9kTeJKAm8yjlYLExgnD_qd6MvzICL8LBao/exec"; 
+                
+                if(SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL") {
+                    // Simulation delay
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    console.log("Data Payload:", payload);
+                    showStatus('success', 'บันทึกข้อมูลจำลองสำเร็จ! (กรุณาใส่ URL ของ Google Apps Script เพื่อใช้งานจริง)');
+                } else {
+                    // Actual Submission (CORS bypass config)
+                    await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        cache: 'no-cache',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    showStatus('success', 'บันทึกข้อมูลของคุณเรียบร้อยแล้ว ขอขอบคุณที่ร่วมตอบแบบสอบถาม');
+                }
+
+                // Reset Form
+                form.reset();
+                updateRadioUI();
+                courseSelections = {};
+                renderCoursePages(); // Reset tables UI by redrawing
+                currentPage = 0;
+                updateView();
+
+            } catch (error) {
+                console.error("Error submitting form:", error);
+                showStatus('error', 'เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง');
+            } finally {
+                isSubmitting = false;
+                btnSubmit.innerHTML = submitBtnOriginalHTML;
+                btnSubmit.classList.remove('cursor-not-allowed', 'opacity-80');
+            }
+        });
+    </script>
+</body>
+</html>
